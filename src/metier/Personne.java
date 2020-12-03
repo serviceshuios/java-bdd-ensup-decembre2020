@@ -6,6 +6,7 @@ public class Personne {
     private String nom;
     private String prenom;
     private int age;
+    private Formation formation;
 
     public Personne() {
     }
@@ -14,6 +15,14 @@ public class Personne {
         this.nom = nom;
         this.prenom = prenom;
         this.age = age;
+    }
+
+    public Formation getFormation() {
+        return formation;
+    }
+
+    public void setFormation(Formation formation) {
+        this.formation = formation;
     }
 
     public int getId() {
