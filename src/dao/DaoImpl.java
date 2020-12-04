@@ -1,5 +1,7 @@
 package dao;
 
+import metier.CarteEtudiant;
+import metier.Formation;
 import metier.Personne;
 
 import java.sql.*;
@@ -153,5 +155,199 @@ public class DaoImpl implements IDao{
             e.printStackTrace();
         }
         return personnes;
+    }
+
+    @Override
+    public int addFormation(Formation f) {
+        try {
+            //1- créer la connexion
+            cn = DriverManager.getConnection(url,username,mdp);
+            //2- créer la requête
+            String sql = "INSERT INTO formation(intitule, nbheures) VALUES(?,?)";
+            st = cn.prepareStatement(sql);
+            st.setString(1,f.getIntitule());
+            st.setInt(2, f.getNbHeures());
+            //3- exécuter la requête
+            res=st.executeUpdate();
+            //4- récupérer le résultat
+
+            //5- fermer la connexion
+            cn.close();
+            System.out.println("la formation "+f +" a bien été ajoutée en BDD");
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            return res;
+        }
+    }
+
+    @Override
+    public List<Formation> findAllFormations() {
+        List<Formation> formations = new ArrayList<Formation>();
+        try {
+            //1- créer la connexion
+            cn = DriverManager.getConnection(url,username,mdp);
+            //2- créer la requête
+            String sql = "SELECT * FROM formation";
+            st = cn.prepareStatement(sql);
+            //3- exécuter la requête
+            rs = st.executeQuery();
+            //4- récupérer le résultat
+            while(rs.next()) {
+                //1- créer un objet de type formation
+                Formation f = new Formation();
+                f.setIdFormation(rs.getInt("idFormation"));
+                f.setIntitule(rs.getString("intitule"));
+                f.setNbHeures(rs.getInt("nbheures"));
+
+                //2- ajouter l'objet personne à la liste créée
+                formations.add(f);
+            }
+            //5- fermer la connexion
+            cn.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return formations;
+    }
+
+    @Override
+    public int addPersonneFormation(Personne p, Formation f) {
+
+
+        try {
+            //1- créer la connexion
+            cn = DriverManager.getConnection(url,username,mdp);
+            //2- créer la requête
+            String sql = "UPDATE personne SET idFormation=? WHERE id=?";
+            st = cn.prepareStatement(sql);
+            st.setInt(1,f.getIdFormation());
+            st.setInt(2,p.getId());
+            //3- exécuter la requête
+            res = st.executeUpdate();
+            //4- récupérer le résultat
+
+            //5- fermer la connexion
+            cn.close();
+            System.out.println("la personne " +p+" a bien été ajoutée à la formation "+f);
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return res;
+    }
+
+    @Override
+    public Formation getFormation(int id) {
+        Formation f = new Formation();
+
+        try {
+            //1- créer la connexion
+            cn = DriverManager.getConnection(url,username,mdp);
+            //2- créer la requête
+            String sql = "SELECT * FROM formation where idFormation=?";
+            st=cn.prepareStatement(sql);
+            st.setInt(1,id);
+            //3- exécuter la requête
+            rs = st.executeQuery();
+            //4- récupérer le résultat
+            rs.next();
+            f.setIdFormation(rs.getInt("idFormation"));
+            f.setIntitule(rs.getString("intitule"));
+            f.setNbHeures(rs.getInt("nbheures"));
+            //5- fermer la connexion
+            cn.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return f;
+    }
+
+    @Override
+    public int addCarteEtudiant(CarteEtudiant c) {
+        try {
+            //1- créer la connexion
+            cn = DriverManager.getConnection(url,username,mdp);
+            //2- créer la requête
+            String sql = "INSERT INTO carteEtudiant(numeroCarte,dateExpiration) VALUES(?,?)";
+            st = cn.prepareStatement(sql);
+            st.setInt(1,c.getNumeroCarte());
+            st.setDate(2, new Date(c.getDateExpiration().getTime()));
+            //3- exécuter la requête
+            res=st.executeUpdate();
+            //4- récupérer le résultat
+
+            //5- fermer la connexion
+            cn.close();
+            System.out.println("la carte "+c +" a bien été ajoutée en BDD");
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            return res;
+        }
+    }
+
+    @Override
+    public int linkPersonneToCarte(Personne p, CarteEtudiant c) {
+
+
+        try {
+            //1- créer la connexion
+            cn = DriverManager.getConnection(url,username,mdp);
+            //2- créer la requête
+            String sql = "UPDATE personne SET idCarte=? WHERE id=?";
+
+            String sql2 = "SELECT * FROM personne where idCarte = ?";
+
+            st = cn.prepareStatement(sql2);
+            st.setInt(1,c.getIdCarte());
+            rs = st.executeQuery();
+            if(rs.next()){
+                System.out.println("La carte est déja attribuée");
+            }
+            else {
+                st = cn.prepareStatement(sql);
+                st.setInt(1, c.getIdCarte());
+                st.setInt(2, p.getId());
+                //3- exécuter la requête
+                res = st.executeUpdate();
+                //4- récupérer le résultat
+                System.out.println("la carte " +c+" a bien été attribuée à la personne "+p);
+            }
+            //5- fermer la connexion
+            cn.close();
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return res;
+    }
+
+    @Override
+    public CarteEtudiant getCarte(int id) {
+        CarteEtudiant c = new CarteEtudiant();
+
+        try {
+            //1- créer la connexion
+            cn = DriverManager.getConnection(url,username,mdp);
+            //2- créer la requête
+            String sql = "SELECT * FROM carteEtudiant where idCarte=?";
+            st=cn.prepareStatement(sql);
+            st.setInt(1,id);
+            //3- exécuter la requête
+            rs = st.executeQuery();
+            //4- récupérer le résultat
+            rs.next();
+            c.setIdCarte(rs.getInt("idCarte"));
+            c.setNumeroCarte(rs.getInt("numeroCarte"));
+            c.setDateExpiration(rs.getDate("dateExpiration"));
+            //5- fermer la connexion
+            cn.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return c;
     }
 }

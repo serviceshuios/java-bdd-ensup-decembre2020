@@ -2,6 +2,8 @@ package service;
 
 import dao.DaoImpl;
 import dao.IDao;
+import metier.CarteEtudiant;
+import metier.Formation;
 import metier.Personne;
 
 import java.util.List;
@@ -34,5 +36,40 @@ public class ServiceImpl implements Iservice{
     @Override
     public List<Personne> findAll() {
         return dao.findAll();
+    }
+
+    @Override
+    public int addFormation(Formation f) {
+        return dao.addFormation(f);
+    }
+
+    @Override
+    public List<Formation> findAllFormations() {
+        return dao.findAllFormations();
+    }
+
+    @Override
+    public int addPersonneFormation(Personne p, Formation f) {
+        return dao.addPersonneFormation(p,f);
+    }
+
+    @Override
+    public Formation getFormation(int id) {
+        return dao.getFormation(id);
+    }
+
+    @Override
+    public int addCarteEtudiant(CarteEtudiant c) {
+        return dao.addCarteEtudiant(c);
+    }
+
+    @Override
+    public int linkPersonneToCarte(Personne p, CarteEtudiant c) {
+        return dao.linkPersonneToCarte(p,c);
+    }
+
+    @Override
+    public CarteEtudiant getCarteEtudiant(int id) {
+        return dao.getCarte(id);
     }
 }

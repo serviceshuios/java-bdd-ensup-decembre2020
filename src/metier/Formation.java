@@ -48,4 +48,14 @@ public class Formation {
     public void setNbHeures(int nbHeures) {
         this.nbHeures = nbHeures;
     }
+
+    @Override
+    public String toString() {
+        return "Formation{" +
+                "idFormation=" + idFormation +
+                ", intitule='" + intitule + '\'' +
+                ", nbHeures=" + nbHeures +
+                ", personnes=" + personnes +
+                '}';
+    }
 }

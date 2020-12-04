@@ -1,21 +1,25 @@
 package presentation;
 
+import metier.CarteEtudiant;
+import metier.Formation;
 import metier.Personne;
 import service.Iservice;
 import service.ServiceImpl;
 
-import java.util.List;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+
 
 public class Lanceur {
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws ParseException {
         // déclaration de la couche service
         Iservice service = new ServiceImpl();
 
-        // ajout d'une personne
-        /*Personne p1 = new Personne("Benin","Antoine",42);
-        System.out.println("-----Appel de la méthode ajout depuis le lanceur ------");
-        service.addPersonne(p1);*/
+        // ajout d'une carte
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        CarteEtudiant c = new CarteEtudiant(12347,sdf.parse("2023-10-12"));
+        service.addCarteEtudiant(c);
 
         // Lister les personnes de la BDD
         //List<Personne> personnes = service.findAll();
@@ -23,23 +27,26 @@ public class Lanceur {
         for(Personne p : service.findAll()){
             System.out.println(p);
         }
+
+        System.out.println("---LISTE DES FORMATIONS");
+        for(Formation fo : service.findAllFormations()){
+            System.out.println(fo);
+        }
         System.out.println("---AFFICHAGE PERSONNE AYANT POUR ID 1");
-        System.out.println(service.getPersonne(1));
+        //
+        // System.out.println(service.getPersonne(4));
         /*System.out.println("---SUPPRESSION PERSONNE AYANT POUR ID 2");
         service.deletePersonne(service.getPersonne(2));
         System.out.println("---LISTE DES PERSONNES");
         for(Personne p : service.findAll()){
             System.out.println(p);
         }*/
-        System.out.println("---MODIFICATION PERSONNE AYANT POUR ID 3");
-        Personne p2 = service.getPersonne(3);
-        p2.setNom("Boulanger");
-        p2.setPrenom("Patrick");
-        p2.setAge(55);
-        service.updatePersonne(p2);
-        System.out.println("---LISTE DES PERSONNES");
-        for(Personne p : service.findAll()){
-            System.out.println(p);
-        }
+       /* System.out.println("---AJOUT D'UNE PERSONNE A UNE FORMATION");
+        Formation f1 = service.getFormation(1);
+        Personne p4 = service.getPersonne(4);
+
+        service.addPersonneFormation(p4,f1);*/
+        // ajouter personne carte
+        service.linkPersonneToCarte(service.getPersonne(5),service.getCarteEtudiant(2));
     }
 }

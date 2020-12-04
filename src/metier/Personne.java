@@ -7,6 +7,15 @@ public class Personne {
     private String prenom;
     private int age;
     private Formation formation;
+    private CarteEtudiant carteEtudiant;
+
+    public CarteEtudiant getCarteEtudiant() {
+        return carteEtudiant;
+    }
+
+    public void setCarteEtudiant(CarteEtudiant carteEtudiant) {
+        this.carteEtudiant = carteEtudiant;
+    }
 
     public Personne() {
     }
