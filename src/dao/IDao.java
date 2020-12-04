@@ -1,6 +1,7 @@
 package dao;
 
 import metier.CarteEtudiant;
+import metier.Club;
 import metier.Formation;
 import metier.Personne;
 
@@ -20,4 +21,9 @@ public interface IDao {
     int linkPersonneToCarte(Personne p, CarteEtudiant c);
 
     CarteEtudiant getCarte(int id);
+
+    int addClub(Club c);
+    Club getClub(int id);
+    int inscription(Club c, Personne p);
+    List<Club> getClubPersonne(int idPersonne);
 }

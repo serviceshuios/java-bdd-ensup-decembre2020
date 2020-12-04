@@ -3,6 +3,7 @@ package service;
 import dao.DaoImpl;
 import dao.IDao;
 import metier.CarteEtudiant;
+import metier.Club;
 import metier.Formation;
 import metier.Personne;
 
@@ -71,5 +72,25 @@ public class ServiceImpl implements Iservice{
     @Override
     public CarteEtudiant getCarteEtudiant(int id) {
         return dao.getCarte(id);
+    }
+
+    @Override
+    public int addClub(Club c) {
+        return dao.addClub(c);
+    }
+
+    @Override
+    public Club getClub(int id) {
+        return dao.getClub(id);
+    }
+
+    @Override
+    public int inscription(Club c, Personne p) {
+        return dao.inscription(c,p);
+    }
+
+    @Override
+    public List<Club> getClubPersonne(int idPersonne) {
+        return dao.getClubPersonne(idPersonne);
     }
 }

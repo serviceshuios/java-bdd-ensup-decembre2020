@@ -1,6 +1,7 @@
 package presentation;
 
 import metier.CarteEtudiant;
+import metier.Club;
 import metier.Formation;
 import metier.Personne;
 import service.Iservice;
@@ -17,9 +18,13 @@ public class Lanceur {
         Iservice service = new ServiceImpl();
 
         // ajout d'une carte
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-        CarteEtudiant c = new CarteEtudiant(12347,sdf.parse("2023-10-12"));
-        service.addCarteEtudiant(c);
+        //SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        //CarteEtudiant c = new CarteEtudiant(12347,sdf.parse("2023-10-12"));
+        //service.addCarteEtudiant(c);
+
+        //ajout de clubs
+        //Club c1 = new Club("jeux vidéos");
+        //service.addClub(c1);
 
         // Lister les personnes de la BDD
         //List<Personne> personnes = service.findAll();
@@ -47,6 +52,14 @@ public class Lanceur {
 
         service.addPersonneFormation(p4,f1);*/
         // ajouter personne carte
-        service.linkPersonneToCarte(service.getPersonne(5),service.getCarteEtudiant(2));
+        //service.linkPersonneToCarte(service.getPersonne(5),service.getCarteEtudiant(2));
+
+        // inscription clubs
+       // service.inscription(service.getClub(4),service.getPersonne(4));
+        // affichage des clubs de la personne 4
+        System.out.println("---LISTE DES CLUBS D'UNE PERSONNE---");
+        for (Club c : service.getClubPersonne(4)) {
+            System.out.println(c);
+        }
     }
 }

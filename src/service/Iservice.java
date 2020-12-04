@@ -1,6 +1,7 @@
 package service;
 
 import metier.CarteEtudiant;
+import metier.Club;
 import metier.Formation;
 import metier.Personne;
 
@@ -20,4 +21,9 @@ public interface Iservice {
     int linkPersonneToCarte(Personne p, CarteEtudiant c);
 
     CarteEtudiant getCarteEtudiant(int id);
+
+    int addClub(Club c);
+    Club getClub(int id);
+    int inscription(Club c, Personne p);
+    List<Club> getClubPersonne(int idPersonne);
 }

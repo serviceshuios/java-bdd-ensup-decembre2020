@@ -1,10 +1,13 @@
 package dao;
 
 import metier.CarteEtudiant;
+import metier.Club;
 import metier.Formation;
 import metier.Personne;
 
 import java.sql.*;
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -349,5 +352,114 @@ public class DaoImpl implements IDao{
         }
 
         return c;
+    }
+
+    @Override
+    public int addClub(Club c) {
+        try {
+            //1- créer la connexion
+            cn = DriverManager.getConnection(url,username,mdp);
+            //2- créer la requête
+            String sql = "INSERT INTO club(nom) VALUES(?)";
+            st = cn.prepareStatement(sql);
+            st.setString(1,c.getNom());
+            //3- exécuter la requête
+            res=st.executeUpdate();
+            //4- récupérer le résultat
+
+            //5- fermer la connexion
+            cn.close();
+            System.out.println("le club "+c +" a bien été ajoutée en BDD");
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            return res;
+        }
+    }
+
+    @Override
+    public Club getClub(int id) {
+        Club c = new Club();
+
+        try {
+            //1- créer la connexion
+            cn = DriverManager.getConnection(url,username,mdp);
+            //2- créer la requête
+            String sql = "SELECT * FROM club where idClub=?";
+            st=cn.prepareStatement(sql);
+            st.setInt(1,id);
+            //3- exécuter la requête
+            rs = st.executeQuery();
+            //4- récupérer le résultat
+            rs.next();
+            c.setIdClub(rs.getInt("idClub"));
+            c.setNom(rs.getString("nom"));
+            //5- fermer la connexion
+            cn.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return c;
+    }
+
+    @Override
+    public int inscription(Club c, Personne p) {
+        try {
+            //1- créer la connexion
+            cn = DriverManager.getConnection(url,username,mdp);
+            //2- créer la requête
+            String sql = "INSERT INTO inscription" +
+                    "(idPersonne, idClub, dateInscription) VALUES(?,?,?)";
+            st = cn.prepareStatement(sql);
+            st.setInt(1,p.getId());
+            st.setInt(2,c.getIdClub());
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+            st.setDate(3, Date.valueOf(LocalDate.now().toString()));
+            //3- exécuter la requête
+            res=st.executeUpdate();
+            //4- récupérer le résultat
+
+            //5- fermer la connexion
+            cn.close();
+            System.out.println(p+ " a bien été ajouté au club "+c );
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            return res;
+        }
+    }
+
+    @Override
+    public List<Club> getClubPersonne(int idPersonne) {
+        List<Club> clubs = new ArrayList<Club>();
+        try {
+            //1- créer la connexion
+            cn = DriverManager.getConnection(url,username,mdp);
+            //2- créer la requête
+            String sql = "SELECT * FROM club, inscription, personne" +
+                    " where inscription.idPersonne=personne.id" +
+                    " and inscription.idClub = club.idClub" +
+                    " and inscription.idPersonne=?";
+            st = cn.prepareStatement(sql);
+            st.setInt(1,idPersonne);
+            //3- exécuter la requête
+            rs = st.executeQuery();
+            //4- récupérer le résultat
+            while(rs.next()) {
+                //1- créer un objet de type formation
+                Club c = new Club();
+                c.setIdClub(rs.getInt("idClub"));
+                c.setNom(rs.getString("nom"));
+
+                //2- ajouter l'objet personne à la liste créée
+                clubs.add(c);
+            }
+            //5- fermer la connexion
+            cn.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return clubs;
     }
 }

@@ -1,5 +1,8 @@
 package metier;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class Personne {
 
     private int id;
@@ -8,6 +11,7 @@ public class Personne {
     private int age;
     private Formation formation;
     private CarteEtudiant carteEtudiant;
+    private List<Club> clubs = new ArrayList<Club>();
 
     public CarteEtudiant getCarteEtudiant() {
         return carteEtudiant;
@@ -64,6 +68,14 @@ public class Personne {
 
     public void setAge(int age) {
         this.age = age;
+    }
+
+    public List<Club> getClubs() {
+        return clubs;
+    }
+
+    public void setClubs(List<Club> clubs) {
+        this.clubs = clubs;
     }
 
     @Override
